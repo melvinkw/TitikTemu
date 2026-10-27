@@ -25,5 +25,5 @@ $base = baseUrl();
     <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css" />
 </head>
 
-<body class="bg-primary font-sans text-navy antialiased">
+<body class="bg-page font-sans text-navy antialiased">
     <div class="mx-auto flex min-h-screen max-w-page flex-col">

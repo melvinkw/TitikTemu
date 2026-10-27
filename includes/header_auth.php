@@ -23,4 +23,5 @@ $pageTitle = $pageTitle ?? 'Login';
     <!-- 🔥 Tailwind hasil build -->
     <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css" />
 </head>
-<body class="bg-primary font-sans text-navy antialiased"></body>
+<body class="bg-primary font-sans text-navy antialiased">
+<!-- <body> ditutup di includes/footer_auth.php -->

@@ -31,12 +31,19 @@ function loadEnv(string $path): void
  * Deteksi BASE_URL otomatis dari folder project.
  * Hasil contoh: "/TitikTemu"
  */
-function baseUrl(): string
-{
-    $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-    // Ambil hanya segmen pertama (nama folder project)
-    $parts = explode('/', trim($scriptDir, '/'));
-    return '/' . ($parts[0] ?? '');
+function baseUrl($path = '') {
+    $appUrl = $_ENV['APP_URL'] ?? getenv('APP_URL') ?? '';
+
+    if (empty($appUrl)) {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8080';
+        $appUrl = $protocol . $host;
+    }
+
+    $appUrl = rtrim($appUrl, '/');
+    $path = ltrim($path, '/');
+
+    return $path ? "$appUrl/$path" : $appUrl;
 }
 
 /**
@@ -110,3 +117,6 @@ function e(?string $str): string
 {
     return htmlspecialchars((string)$str, ENT_QUOTES, 'UTF-8');
 }
+
+// Helper komponen UI: component('nama', [...])
+require_once __DIR__ . '/component.php';

@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Kelas pembungkus yang dipakai berulang.
+ * Dipakai untuk elemen yang membungkus konten lain (tidak bisa dijadikan file include biasa).
+ */
+@layer components {
+    /* Kartu putih besar untuk form & review (Figma: frame "form", p-48, radius 12, shadow 0 0 2px) */
+    .panel {
+        @apply flex w-full flex-col gap-10 rounded-xl bg-white p-6 shadow-card sm:p-12;
+    }
+
+    /* Kotak besar halaman detail petugas (Figma: border #e2e8f0, radius 10, shadow 0 4px 24px) */
+    .detail-box {
+        @apply flex w-full flex-col items-center gap-4 rounded-[10px] border border-[#e2e8f0] p-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)];
+    }
+
+    /* Kartu putih bergaris tipis di panel petugas (Figma: shadow 0 0 4px 1.5px) */
+    .panel-card {
+        @apply overflow-hidden rounded-[10px] bg-white shadow-[0_0_4px_1.5px_rgba(0,0,0,0.25)];
+    }
+}

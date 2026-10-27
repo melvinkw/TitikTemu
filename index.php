@@ -1,7 +1,7 @@
 <?php
 /**
  * index.php
- * Halaman login utama. Semua role (mahasiswa, petugas, admin) login dari sini.
+ * Halaman login utama (Figma: "Login"). Semua role (mahasiswa, petugas, admin) login dari sini.
  */
 require_once __DIR__ . '/includes/functions.php';
 
@@ -15,62 +15,53 @@ $base = baseUrl();
 require_once __DIR__ . '/includes/header_auth.php';
 ?>
 
-<main class="grid min-h-screen grid-cols-1 gap-0 p-4 sm:p-6 md:grid-cols-2 md:gap-8 md:p-8">
+<main class="flex min-h-screen flex-wrap items-center gap-16 p-4 sm:px-8 md:flex-nowrap">
 
-    <!-- Panel gradient kiri -->
-    <section class="relative hidden min-h-[500px] overflow-hidden rounded-lg bg-[#06123f] md:block" aria-label="Visual TitikTemu">
-        <div class="absolute -top-16 left-[15%] h-80 w-80 rounded-full bg-amber-400/95 blur-3xl"></div>
-        <div class="absolute -top-10 right-[-5rem] h-80 w-80 rounded-full bg-rose-500/90 blur-3xl"></div>
-        <div class="absolute left-[-5rem] top-[30%] h-96 w-96 rounded-full bg-slate-300/90 blur-3xl"></div>
-        <div class="absolute bottom-[-7rem] right-[10%] h-96 w-96 rounded-full bg-[#101a4b] blur-3xl"></div>
-        <div class="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#06123f]/50"></div>
+    <!-- Panel kiri. Di Figma berupa gambar gradasi; gambarnya belum bisa diunduh, jadi didekati dengan CSS -->
+    <section class="relative hidden h-[758px] max-h-[calc(100vh-62px)] max-w-[672px] flex-1 overflow-hidden rounded-lg bg-[#0b1847] md:block" aria-hidden="true">
+        <div class="absolute -top-24 left-[22%] h-96 w-80 rounded-full bg-amber-400/90 blur-3xl"></div>
+        <div class="absolute -right-16 -top-16 h-80 w-72 rounded-full bg-rose-500/80 blur-3xl"></div>
+        <div class="absolute left-[-6rem] top-[32%] h-80 w-[30rem] -rotate-12 rounded-full bg-slate-200/90 blur-3xl"></div>
+        <div class="absolute bottom-[-8rem] right-[5%] h-96 w-96 rounded-full bg-[#0b1847] blur-3xl"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#0b1847]/60"></div>
     </section>
 
     <!-- Form login -->
-    <section class="flex min-h-[calc(100vh-2rem)] items-center justify-center px-2 py-10 sm:px-6 md:min-h-0 md:px-4 md:py-8">
-        <div class="w-full max-w-[440px]">
+    <section class="flex w-full flex-1 justify-center py-10 md:max-w-[624px]">
+        <div class="flex w-full max-w-[439px] flex-col items-center gap-[65px]">
 
-            <header class="mb-12 text-center sm:mb-16 md:mb-16">
-                <h1 class="mb-3 text-4xl font-extrabold tracking-tight sm:text-[44px]">TitikTemu.</h1>
-                <p class="text-sm leading-relaxed text-[#999bad] sm:text-base">Platform Lost &amp; Found Polinema</p>
+            <header class="flex w-full max-w-[422px] flex-col items-center gap-4 text-center leading-[normal]">
+                <h1 class="font-heading text-5xl font-semibold text-navy">TitikTemu.</h1>
+                <p class="text-base text-[#9e9caa]">Platform Lost &amp; Found Polinema</p>
             </header>
 
-            <?php if (!empty($_SESSION['error'])): ?>
-                <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-700">
-                    <?= e($_SESSION['error']) ?>
-                </div>
-                <?php unset($_SESSION['error']); ?>
-            <?php endif; ?>
+            <form action="<?= $base ?>/proses/login.php" method="POST" class="flex w-full flex-col gap-8">
 
-            <?php if (!empty($_SESSION['success'])): ?>
-                <div class="mb-5 rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-700">
-                    <?= e($_SESSION['success']) ?>
-                </div>
-                <?php unset($_SESSION['success']); ?>
-            <?php endif; ?>
+                <?php if (!empty($_SESSION['error'])): ?>
+                    <div class="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-700">
+                        <?= e($_SESSION['error']) ?>
+                    </div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
 
-            <form action="<?= $base ?>/proses/login.php" method="POST" class="w-full">
+                <?php if (!empty($_SESSION['success'])): ?>
+                    <div class="rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-700">
+                        <?= e($_SESSION['success']) ?>
+                    </div>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
 
-                <div class="mb-7 flex flex-col gap-3">
-                    <label for="username" class="text-[13px] font-bold">Username</label>
-                    <input type="text" id="username" name="username" autocomplete="username" required
-                           class="h-[41px] w-full rounded-lg border border-[#b8bdce] bg-transparent px-4 text-sm outline-none placeholder:text-[#a7aabd] focus:border-[#06123f] focus:ring-2 focus:ring-[#06123f]/10" />
-                </div>
+                <?php component('field', ['label' => 'Username', 'name' => 'username', 'id' => 'username',
+                                          'placeholder' => 'NIM', 'attrs' => 'autocomplete="username" required']); ?>
+                <?php component('field', ['label' => 'Password', 'name' => 'password', 'id' => 'password', 'type' => 'password',
+                                          'placeholder' => '*************', 'attrs' => 'autocomplete="current-password" required']); ?>
 
-                <div class="mb-7 flex flex-col gap-3">
-                    <label for="password" class="text-[13px] font-bold">Password</label>
-                    <input type="password" id="password" name="password" autocomplete="current-password" required
-                           class="h-[41px] w-full rounded-lg border border-[#b8bdce] bg-transparent px-4 text-sm outline-none placeholder:text-[#a7aabd] focus:border-[#06123f] focus:ring-2 focus:ring-[#06123f]/10" />
-                </div>
+                <a href="#" class="w-full text-right font-heading text-base font-semibold leading-[1.5] text-[#727085]">Forgot Password?</a>
 
-                <div class="mb-9 flex justify-end">
-                    <a href="#" class="text-sm font-bold text-[#74758b] hover:text-[#06123f] hover:underline">Forgot Password?</a>
-                </div>
-
-                <button type="submit" class="h-[52px] w-full rounded-lg bg-[#06123f] text-sm font-bold text-white transition-colors hover:bg-[#10245e] active:scale-[0.99]">
+                <button type="submit"
+                        class="flex w-full items-center justify-center rounded-lg bg-navy px-6 py-[14px] font-heading text-base font-semibold leading-[1.5] text-white shadow-button">
                     Sign in
                 </button>
-
             </form>
 
         </div>

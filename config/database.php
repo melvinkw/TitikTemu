@@ -17,5 +17,5 @@ try {
     if (($_ENV['APP_DEBUG'] ?? 'false') === 'true') {
         die("❌ Koneksi database gagal: " . $e->getMessage());
     }
-    die("❌ Terjadi kesalahan pada database.");
+    die("❌ Terjadi kesalahan pada database." . $e->getMessage());
 }

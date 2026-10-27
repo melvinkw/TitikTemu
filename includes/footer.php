@@ -1,7 +1,6 @@
-        </main> <!-- Penutup tag <main> dari halaman -->
-
         <!-- ============ FOOTER ============ -->
-        <footer class="mt-auto flex h-16 items-center justify-center bg-navy px-4 text-center text-sm text-white">
+        <!-- Setiap halaman membuka & menutup <main> sendiri sebelum memanggil footer ini -->
+        <footer class="mt-auto flex h-16 items-center justify-center bg-navy px-4 text-center text-sm leading-[normal] text-primary">
             <p>
                 <span class="text-footer">©</span> 2026
                 <span class="text-footer">TitikTemu</span>. POLITEKNIK NEGERI MALANG.
