@@ -175,7 +175,7 @@ Melvin menjadi penanggung jawab migration pada database bersama. Anggota lain me
 | 3 | Dashboard petugas/admin, klaim, status, responsive | Jalur utama mahasiswa → petugas → klaim bisa diuji |
 | 4 | Feature freeze, testing, bugfix, deployment/demo, dokumentasi | Versi stabil, bukti uji, backup, latihan presentasi |
 
-Rafa dan Agam tidak perlu menunggu UI/UX selesai untuk belajar. Mulai dengan satu komponen kecil dari screenshot referensi; Faza meninjau hasilnya setiap hari. Panduan lebih rinci ada pada dokumen kerja tim yang disiapkan bersama versi backend final.
+Rafa dan Agam tidak perlu menunggu UI/UX selesai untuk belajar. Mulai dengan satu komponen kecil dari screenshot referensi; Faza meninjau hasilnya setiap hari. Panduan lengkap ada di [docs/TEAM_WORKFLOW.md](docs/TEAM_WORKFLOW.md).
 
 ## Troubleshooting
 
