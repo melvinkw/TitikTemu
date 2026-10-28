@@ -1,317 +1,193 @@
+# TitikTemu
 
-# 📍 TitikTemu
+> Platform Lost & Found untuk komunitas Politeknik Negeri Malang.
 
-> **Website Lost & Found untuk Warga Politeknik Negeri Malang**
+TitikTemu dirancang untuk membantu mahasiswa melaporkan kehilangan/penemuan barang, memantau laporan, dan melakukan verifikasi melalui petugas.
 
-TitikTemu adalah platform terpusat yang menghubungkan mahasiswa yang kehilangan barang dengan mahasiswa yang menemukan barang. Sistem ini melibatkan **Satpam (Petugas)** sebagai verifikator utama untuk memastikan setiap barang temuan valid dan dikembalikan kepada pemilik yang sah.
+> [!IMPORTANT]
+> **Status branch `main` saat ini:** kode masih berupa prototipe FE awal. Login di `proses/login.php` masih memakai akun hard-coded, beberapa halaman menggunakan data contoh, dan skema database/migration belum ada di branch ini. `test-db.php` hanya memeriksa koneksi PostgreSQL. Jangan menganggap backend final sudah terintegrasi hanya karena koneksi database berhasil.
+>
+> Paket backend prosedural dan FE revisi telah disiapkan terpisah. Sebelum dijadikan versi utama, integrasikan dan uji paket tersebut ke repository ini. Setelah integrasi, perbarui setup sesuai file yang benar-benar ada.
 
----
+## Tech stack
 
-## 📑 Daftar Isi
+- **Backend:** PHP native/prosedural, PDO PostgreSQL
+- **Frontend saat ini:** HTML dan Tailwind CSS CLI
+- **Database:** PostgreSQL
+- **Development:** Laragon/Apache, VS Code, Git/GitHub
+- **Build CSS:** Node.js/npm + Tailwind CLI
 
-1. [Tech Stack](#-tech-stack)
-2. [Tim Pengembang](#-tim-pengembang)
-3. [Konsep PHP Prosedural &amp; Struktur Folder](#-konsep-php-prosedural--struktur-folder)
-4. [Cara Setup Environment &amp; Database](#-cara-setup-environment--database)
-5. [Aturan Git &amp; Kolaborasi (WAJIB DIBACA)](#-aturan-git--kolaborasi-wajib-dibaca)
-6. [Troubleshooting Umum](#-troubleshooting-umum)
+## Struktur folder saat ini
 
----
-
-## 🛠️ Tech Stack
-
-| Komponen                  | Teknologi                    |
-| :------------------------ | :--------------------------- |
-| **Backend**         | PHP Native (Prosedural)      |
-| **Database**        | PostgreSQL                   |
-| **Frontend**        | Tailwind CSS (Build via CLI) |
-| **Web Server**      | Laragon (Apache)             |
-| **Version Control** | Git & GitHub                 |
-
----
-
-## 👥 Tim Pengembang
-
-| Nama                     | Peran           | Tanggung Jawab                                      |
-| :----------------------- | :-------------- | :-------------------------------------------------- |
-| **[Nama Kamu]**    | Project Manager | Mengatur timeline, review code, dan integrasi fitur |
-| **[Nama Teman 1]** | Frontend/UI-UX  | Desain antarmuka, slicing Tailwind, dan layout      |
-| **[Nama Teman 2]** | Backend         | Logika halaman, proses form, dan query database     |
-| **[Nama Teman 3]** | Database Admin  | Merancang ERD, migrasi tabel, dan seeder            |
-
----
-
-## 🏗️ Konsep PHP Prosedural & Struktur Folder
-
-Project ini menggunakan pendekatan **PHP Prosedural Terstruktur**. Setiap halaman memiliki file PHP-nya sendiri, bagian yang berulang (header, footer, fungsi bantu) disimpan di folder `includes/`, dan logika form diproses di folder `proses/`.
-
-### 📁 Struktur Folder
-
-```text
+\`\`\`text
 TitikTemu/
-├── admin/                # Halaman khusus role Admin
-│   └── dashboard.php
-├── assets/               # Semua file statis
-│   ├── css/              # input.css (source) & style.css (hasil build)
-│   ├── img/              # Gambar & ikon
-│   └── js/               # JavaScript custom
+├── admin/             # Halaman admin (prototipe)
+├── assets/
+│   ├── css/           # input.css (source) dan style.css
+│   └── img/           # Gambar serta ikon
 ├── config/
-│   └── database.php      # Koneksi PostgreSQL (PDO)
-├── includes/             # Komponen yang dipanggil berulang
-│   ├── functions.php     # Fungsi bantu (loadEnv, isLoggedIn, dll)
-│   ├── header.php        # Layout atas (halaman setelah login)
-│   ├── header_auth.php   # Layout atas khusus halaman login/register
-│   ├── footer.php        # Layout bawah
-│   ├── footer_auth.php   # Layout bawah khusus halaman login/register
-│   └── navbar.php        # Navbar adaptif sesuai role
-├── mahasiswa/            # Halaman khusus role Mahasiswa
-│   ├── dashboard.php
-│   ├── barang-temuan.php
-│   ├── lapor-hilang.php
-│   └── lapor-temuan.php
-├── petugas/              # Halaman khusus role Petugas (Satpam)
-│   ├── dashboard.php
-│   ├── verifikasi.php
-│   └── riwayat.php
-├── proses/               # Handler form (POST only)
-│   ├── login.php
-│   ├── logout.php
-│   ├── lapor-hilang.php
-│   └── lapor-temuan.php
-├── uploads/              # Tempat penyimpanan foto dari user
-├── .env                  # Konfigurasi rahasia (JANGAN DI-COMMIT)
-├── .env.example          # Template konfigurasi
-├── .gitignore
-├── index.php             # 🏠 Halaman LOGIN (halaman default)
-├── package.json          # Untuk Tailwind CLI
-├── tailwind.config.js    # Konfigurasi Tailwind
-└── README.md
-```
+│   └── database.php   # Koneksi PostgreSQL lewat PDO
+├── includes/          # Helper sesi/role, header, footer, navbar
+├── mahasiswa/         # Halaman mahasiswa (sebagian masih data contoh)
+├── petugas/           # Halaman petugas (prototipe)
+├── proses/            # Handler form, termasuk login
+├── .env.example       # Template konfigurasi; tanpa password asli
+├── index.php          # Halaman login
+├── package.json       # Dependency Tailwind CLI
+└── test-db.php        # Pemeriksaan koneksi PostgreSQL
+\`\`\`
 
-### 🔄 Alur Kerja PHP Prosedural
+## Setup lokal untuk mulai mengerjakan FE
 
-1. **User membuka URL** (misal `index.php`).
-2. Halaman PHP memanggil `includes/functions.php` untuk load fungsi bantu.
-3. Halaman juga memanggil `config/database.php` jika butuh akses database.
-4. Halaman mengecek login/role via `requireLogin()`.
-5. Halaman merender tampilan dengan `require includes/header.php` → konten → `require includes/footer.php`.
-6. **Form dikirim** ke folder `proses/` (misal `proses/login.php`), lalu diproses, dan user di-redirect ke halaman yang sesuai.
+### 1. Prasyarat
 
-> ⚠️ **Penting:** Jangan pernah mengakses file di dalam folder `config/` atau `proses/` secara langsung dari browser (kecuali melalui form submission). File `.env` harus tetap aman dan tidak boleh di-commit.
+Siapkan Laragon (Apache dan PHP 8.1+), Git, Node.js LTS, VS Code, dan akses PostgreSQL. PostgreSQL tidak harus terpasang di setiap laptop jika tim memakai database development bersama yang di-host.
 
----
+Periksa PHP dari terminal VS Code:
 
-## 🚀 Cara Setup Environment & Database
+\`\`\`powershell
+php -v
+php -m
+\`\`\`
 
-### Prasyarat
+Pastikan extension `PDO` dan `pdo_pgsql` aktif untuk PHP yang digunakan Apache dan terminal.
 
-- Laragon (dengan PHP 8.x, PostgreSQL, dan Apache)
-- Node.js (untuk build Tailwind)
-- Git
-- Code Editor (VS Code)
+### 2. Clone repository
 
-### Langkah 1: Clone Repository
+\`\`\`bash
+git clone https://github.com/melvinkw/TitikTemu.git
+cd TitikTemu
+\`\`\`
 
-```bash
-git clone https://github.com/melvinkw/titiktemu.git
-cd titiktemu
-```
+Letakkan folder di dalam folder `www` Laragon, misalnya `C:\laragon\www\TitikTemu`. Jangan membuat folder project bersarang dua kali.
 
-### Langkah 2: Setup Environment
+### 3. Siapkan konfigurasi
 
-Copy file `.env.example` menjadi `.env`, lalu isi kredensial database kamu:
+Buat file `.env` dari template.
 
-```bash
+PowerShell:
+
+\`\`\`powershell
+Copy-Item .env.example .env
+\`\`\`
+
+Git Bash:
+
+\`\`\`bash
 cp .env.example .env
-```
+\`\`\`
 
-Buka `.env` dan sesuaikan:
+Isi `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD` berdasarkan akses yang diberikan Melvin. Jangan pernah commit `.env`.
 
-```env
-DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=titiktemu
-DB_USERNAME=titiktemu_user
-DB_PASSWORD=password_kamu
+**Status saat ini:** handler login masih memakai akun hard-coded dan belum mengambil akun dari database. Aplikasi tetap memuat koneksi database, jadi koneksi PostgreSQL harus valid. Skema final belum tersedia di branch ini.
 
-APP_NAME=TitikTemu
-APP_DEBUG=true
-```
+### 4. Build Tailwind CSS
 
-### Langkah 3: Setup Database PostgreSQL
+Dari root project:
 
-Buka terminal Laragon, lalu masuk ke psql:
-
-```bash
-psql -U postgres
-```
-
-Jalankan perintah SQL berikut:
-
-```sql
-CREATE DATABASE titiktemu;
-CREATE USER titiktemu_user WITH PASSWORD 'password_kamu';
-GRANT ALL PRIVILEGES ON DATABASE titiktemu TO titiktemu_user;
-\c titiktemu
-GRANT ALL ON SCHEMA public TO titiktemu_user;
-\q
-```
-
-> **Catatan:** Jika kamu menggunakan PostgreSQL versi 15 ke atas, perintah `GRANT ALL ON SCHEMA public` wajib dijalankan.
-
-### Langkah 4: Setup Tailwind CSS
-
-Install dependency dan build Tailwind:
-
-```bash
-# Install dependency
+\`\`\`bash
 npm install
-
-# Build Tailwind (mode watch — biarkan terminal ini berjalan)
 npx tailwindcss -i ./assets/css/input.css -o ./assets/css/style.css --watch
-```
+\`\`\`
 
-> **Penting:** Biarkan terminal `--watch` tetap berjalan selama development. Setiap kali kamu menyimpan file `.php`, Tailwind akan otomatis rebuild `style.css`.
+Biarkan terminal `--watch` tetap berjalan saat development. Edit source CSS di `assets/css/input.css`; jangan edit `assets/css/style.css` hasil build secara manual.
 
-### Langkah 5: Jalankan Aplikasi
+### 5. Jalankan aplikasi
 
-Buka browser dan akses:
+Nyalakan Apache dari Laragon, lalu buka:
 
-```text
+\`\`\`text
 http://localhost/TitikTemu/index.php
-```
+\`\`\`
 
-Login menggunakan akun uji coba:
+Pemeriksaan koneksi PostgreSQL:
 
-| Username       | Password       | Role      |
-| :------------- | :------------- | :-------- |
+\`\`\`text
+http://localhost/TitikTemu/test-db.php
+\`\`\`
+
+Akun prototipe:
+
+| Username | Password | Role |
+|---|---|---|
 | `mahasiswa1` | `mahasiswa1` | mahasiswa |
-| `satpam1`    | `satpam1`    | petugas   |
-| `admin`      | `admin`      | admin     |
+| `satpam1` | `satpam1` | petugas |
+| `admin` | `admin` | admin |
 
----
+Akun ini hard-coded dan hanya untuk demo lokal. Jangan gunakan untuk deployment.
 
-## 🌿 Aturan Git & Kolaborasi (WAJIB DIBACA)
+## Git untuk pemula
 
-Untuk menghindari **tabrakan kode (merge conflict)** dan memastikan kolaborasi berjalan lancar, kita menggunakan aturan berikut:
+- **Clone:** mengambil repository ke laptop pertama kali.
+- **Branch:** jalur kerja terpisah untuk satu task. Branch memisahkan perubahan kode, bukan database yang berbeda.
+- **Commit:** menyimpan sekumpulan perubahan dengan catatan.
+- **Push:** mengirim commit ke GitHub.
+- **Pull:** mengambil update dari GitHub.
+- **Pull Request (PR):** permintaan agar branch direview dan digabung ke `main`.
+- **Merge:** menggabungkan perubahan setelah diperiksa.
 
-### 📌 Aturan Utama: 1 Orang = 1 Branch
+Jangan coding langsung di `main`. Setelah clone, buat branch untuk satu task kecil. Contoh:
 
-**Jangan pernah** menulis kode langsung di branch `main`. Setiap anggota tim wajib membuat branch sendiri sesuai fitur yang dikerjakan.
-
-**Format nama branch:**
-
-- `feature/login` — untuk fitur login
-- `feature/lapor-temuan` — untuk fitur upload barang temuan
-- `feature/lapor-hilang` — untuk fitur lapor kehilangan
-- `feature/verifikasi-satpam` — untuk fitur verifikasi
-- `bugfix/nama-bug` — untuk perbaikan bug
-
-### 🔄 Alur Kerja Git (Step by Step)
-
-**1. Sebelum Mulai Bekerja (Pagi Hari)**
-Selalu tarik update terbaru dari branch `main` agar kode kamu tidak ketinggalan:
-
-```bash
-git checkout main
+\`\`\`bash
+git switch main
 git pull origin main
-```
+git switch -c feature/item-card-rafa
 
-**2. Buat Branch Baru untuk Fitur Kamu**
+# Setelah perubahan selesai, cek apa yang berubah
+git status
+git add assets/css/input.css mahasiswa/barang-temuan.php
+git commit -m "feat: improve item card"
+git push -u origin feature/item-card-rafa
+\`\`\`
 
-```bash
-git checkout -b feature/nama-fitur-kamu
-```
+Lalu buka GitHub dan buat PR ke `main`. Sertakan tujuan, cara uji, dan screenshot untuk perubahan visual. Faza mereview FE; Natha memeriksa kesesuaian desain; Melvin memeriksa backend, database, dan integrasi.
 
-**3. Kerjakan Fitur Kamu**
-Lakukan coding seperti biasa. Setelah selesai, simpan perubahan:
+Sebelum task baru, ambil update `main` dan buat branch baru. Jika muncul merge conflict, jangan asal memilih “Accept Current” atau “Accept Incoming”. Bandingkan perubahan dan minta reviewer membantu.
 
-```bash
-git add .
-git commit -m "feat: menambahkan fitur login"
-```
+### Aturan kolaborasi
 
-**4. Push ke GitHub**
+1. Satu branch untuk satu task kecil, bukan satu branch raksasa untuk semua pekerjaan.
+2. Jangan commit `.env`, `node_modules/`, `vendor/`, atau upload privat.
+3. Jangan mengubah `name`, `method`, `action`, atau field form backend tanpa koordinasi dengan Melvin.
+4. Setiap task punya tujuan, file yang boleh diubah, screenshot referensi, definisi selesai, dan langkah uji.
+5. Jangan menjalankan skrip reset/migration pada database bersama tanpa persetujuan penanggung jawab database.
 
-```bash
-git push origin feature/nama-fitur-kamu
-```
+## Database bersama dan migration
 
-**5. Buat Pull Request (PR)**
+Semua laptop bisa menggunakan **satu PostgreSQL development bersama** melalui konfigurasi lokal masing-masing di `.env`. Anggota tidak perlu membuat database sendiri, tetapi data uji yang diubah satu orang juga terlihat oleh anggota lain.
 
-- Buka repository di GitHub.
-- Klik tombol **"Compare & pull request"**.
-- Isi judul dan deskripsi singkat tentang apa yang kamu kerjakan.
-- Minta **Project Manager** atau anggota lain untuk review.
-- Setelah di-approve, baru di-merge ke `main`.
+Branch `main` saat ini **belum memiliki folder migration maupun runner**. Jangan menjalankan perintah migration yang belum tersedia di branch ini. Saat backend final diintegrasikan, gunakan SQL migrations bernomor yang dijalankan lewat skrip PHP CLI sederhana (tanpa framework): migration yang sukses dicatat pada tabel `schema_migrations`; perubahan baru dibuat sebagai file baru dan tidak mengedit migration lama.
 
-### ⚠️ Cara Menghindari Tabrakan Kode (Merge Conflict)
+Melvin menjadi penanggung jawab migration pada database bersama. Anggota lain mengajukan migration lewat PR dan tidak menjalankan migration secara bersamaan. Gunakan data sintetis, pisahkan database development dari demo/production, pakai SSL untuk koneksi hosted jika provider mensyaratkan, dan jangan memakai kredensial superuser untuk aplikasi.
 
-**Aturan Emas:** Selalu `git pull` dari `main` **SEBELUM** mulai coding dan **SEBELUM** push.
+## Pembagian fokus dan rencana empat minggu
 
-Jika kamu sudah lama tidak pull, dan ingin menyatukan update dari `main` ke branch kamu:
+- **Melvin — PM/backend/database:** prioritas, kontrak backend, migration, review integrasi, backup, deployment.
+- **Faza — koordinator FE:** komponen FE, slicing Figma, pembagian task, review PR FE.
+- **Natha — koordinator UI/UX:** UI V2, design system, prototype, review visual.
+- **Rafa — FE pemula:** task terbatas seperti item card, badge status, grid katalog, responsive fixes.
+- **Agam — FE pemula:** task terbatas seperti form field, heading, tabel mobile, empty state.
 
-```bash
-# Pindah ke main dulu
-git checkout main
-git pull origin main
+| Minggu | Fokus | Hasil yang harus terlihat |
+|---|---|---|
+| 1 | Struktur Figma V2, design system, onboarding, latihan HTML/CSS/Git | Semua anggota bisa membuka project; komponen dasar dan kontrak form disepakati |
+| 2 | Slicing halaman inti dan integrasi backend | Home, login/register, form laporan, dashboard mahasiswa |
+| 3 | Dashboard petugas/admin, klaim, status, responsive | Jalur utama mahasiswa → petugas → klaim bisa diuji |
+| 4 | Feature freeze, testing, bugfix, deployment/demo, dokumentasi | Versi stabil, bukti uji, backup, latihan presentasi |
 
-# Balik ke branch kamu
-git checkout feature/nama-fitur-kamu
+Rafa dan Agam tidak perlu menunggu UI/UX selesai untuk belajar. Mulai dengan satu komponen kecil dari screenshot referensi; Faza meninjau hasilnya setiap hari. Panduan lengkap ada di [docs/TEAM_WORKFLOW.md](docs/TEAM_WORKFLOW.md).
 
-# Gabungkan update dari main ke branch kamu
-git merge main
-```
+## Troubleshooting
 
-Jika ada konflik, VS Code akan menunjukkan file mana yang bentrok. Selesaikan konflik tersebut, lalu:
-
-```bash
-git add .
-git commit -m "fix: resolve merge conflict"
-git push origin feature/nama-fitur-kamu
-```
-
-### 🚫 Yang Tidak Boleh Dilakukan
-
-- ❌ Push langsung ke `main` tanpa Pull Request.
-- ❌ Commit file `.env` (berisi password database).
-- ❌ Commit folder `node_modules/` atau `uploads/` (kecuali `.gitkeep`).
-- ❌ Bekerja di branch orang lain tanpa izin.
-- ❌ Edit file `assets/css/style.css` secara manual (file ini hasil build otomatis).
-
-### 📝 Konvensi Commit Message
-
-Gunakan format berikut agar riwayat Git rapi dan mudah dibaca:
-
-| Prefix        | Kegunaan                | Contoh                              |
-| :------------ | :---------------------- | :---------------------------------- |
-| `feat:`     | Menambah fitur baru     | `feat: menambahkan form login`    |
-| `fix:`      | Memperbaiki bug         | `fix: perbaiki validasi password` |
-| `docs:`     | Update dokumentasi      | `docs: update README`             |
-| `style:`    | Perubahan styling/CSS   | `style: ubah warna tombol`        |
-| `refactor:` | Perbaikan struktur kode | `refactor: pisahkan logic auth`   |
+| Masalah | Yang diperiksa |
+|---|---|
+| `could not find driver` | Aktifkan extension `pdo_pgsql` pada PHP Laragon yang benar |
+| `Connection refused` | Periksa host/port dan apakah PostgreSQL berjalan/endpoint dapat dijangkau |
+| `password authentication failed` | Periksa kredensial `.env` secara privat |
+| CSS tidak berubah | Pastikan `--watch` berjalan dan edit `input.css` |
+| Konflik Git | Bandingkan kedua perubahan; jangan memilih versi secara asal |
+| Login/form belum berfungsi penuh | Branch ini masih prototipe; backend final belum terintegrasi |
 
 ---
 
-## ⚠️ Troubleshooting Umum
-
-| Masalah                                 | Solusi                                                                                     |
-| :-------------------------------------- | :----------------------------------------------------------------------------------------- |
-| `could not find driver`               | Aktifkan ekstensi`pdo_pgsql` di Laragon → PHP → Extensions                             |
-| `Connection refused`                  | Pastikan PostgreSQL sudah jalan di Laragon                                                 |
-| `permission denied for schema public` | Jalankan`GRANT ALL ON SCHEMA public TO titiktemu_user;`                                  |
-| Halaman blank/putih                     | Tambahkan`error_reporting(E_ALL); ini_set('display_errors', 1);` di file yang bermasalah |
-| `ERR_CONNECTION_REFUSED`              | Cek port Laragon (Apache = 80) atau restart Laragon                                        |
-| Tailwind style tidak muncul             | Pastikan terminal`--watch` berjalan dan `assets/css/style.css` sudah ter-*generate*  |
-| Gambar pecah (broken image)             | Cek apakah file gambar sudah ada di`assets/img/` dan path menggunakan `baseUrl()`      |
-| Form mengirim tapi tidak ada respon     | Cek handler di folder`proses/` — pastikan `action` form menunjuk file yang benar      |
-
----
-
-## 📞 Kontak
-
-Jika ada pertanyaan atau kendala, hubungi **Project Manager** terlebih dahulu sebelum bertanya ke anggota lain. Mari kita jaga komunikasi yang baik agar project ini selesai tepat waktu! 💪
-
----
-
-**Dibuat dengan ❤️ oleh Tim TitikTemu — Politeknik Negeri Malang**
+**Project:** TitikTemu — PBL Sistem Informasi Bisnis, Politeknik Negeri Malang.
